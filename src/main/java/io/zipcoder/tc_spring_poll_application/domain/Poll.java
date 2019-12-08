@@ -16,7 +16,7 @@ public class Poll {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "POLL_ID")
     @OrderBy
-    private Set options;
+    private Set<Option> options;
 
     public Long getId() {
         return id;
