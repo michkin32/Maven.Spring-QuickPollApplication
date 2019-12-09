@@ -1,5 +1,6 @@
 package io.zipcoder.tc_spring_poll_application.controllers;
 
+import dtos.OptionCount;
 import dtos.VoteResult;
 import io.zipcoder.tc_spring_poll_application.domain.Vote;
 import io.zipcoder.tc_spring_poll_application.repositories.VoteRepository;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.*;
 
 @RestController
 public class ComputeResultController {
@@ -26,7 +29,25 @@ public class ComputeResultController {
         VoteResult voteResult = new VoteResult();
         Iterable<Vote> allVotes = voteRepository.findVotesByPoll(pollId);
 
-        //TODO: Implement algorithm to count votes
+        Map<Long,Integer> totalVotes = new HashMap<>();
+        for (Vote v : allVotes){
+            if (!totalVotes.containsKey(v.getOption().getId())){
+                totalVotes.put(v.getOption().getId(), 1);
+            }else{
+                totalVotes.put(v.getOption().getId(), totalVotes.get(v.getOption().getId()) + 1);
+            }
+        }
+
+        int count = 0;
+        Set<Long> voteKeys = totalVotes.keySet();
+        List<OptionCount> optionCounts = new ArrayList<>();
+        for (Long k : voteKeys) {
+            optionCounts.add(new OptionCount(k, totalVotes.get(k)));
+            count++;
+        }
+
+        voteResult.setResults(optionCounts);
+        voteResult.setTotalVotes(count);
         return new ResponseEntity<VoteResult>(voteResult, HttpStatus.OK);
     }
 

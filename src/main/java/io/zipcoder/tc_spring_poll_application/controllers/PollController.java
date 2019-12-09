@@ -36,9 +36,8 @@ public class PollController {
                 .path("/{id}")
                 .buildAndExpand(poll.getId())
                 .toUri();
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(newPollUri);
-        return new ResponseEntity<>(null, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(newPollUri, HttpStatus.CREATED);
     }
     @RequestMapping(value="/polls/{pollId}", method=RequestMethod.GET)
     public ResponseEntity<?> getPoll(@PathVariable Long pollId) {

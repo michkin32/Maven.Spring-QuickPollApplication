@@ -34,11 +34,11 @@ public class Poll {
         this.question = question;
     }
 
-    public Set getOptions() {
+    public Set<Option> getOptions() {
         return options;
     }
 
-    public void setOptions(Set options) {
+    public void setOptions(Set<Option> options) {
         this.options = options;
     }
 }
